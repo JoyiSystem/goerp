@@ -1,0 +1,151 @@
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="/static/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+            </div>
+            <div class="pull-left info">
+                {{if .LastLogin}}
+                <p>{{i18n .Lang "global.lastLoginTime"}}</p>
+                <a href="#">{{dateformat .LastLogin "2006-01-02 15:04:05"}}</a> {{else}}
+                <a href="#">{{i18n .Lang "global.firstLogin"}}</a> {{end}}
+            </div>
+        </div>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" id="top-menu">
+            <!--<li class="header text-center">菜单</li>-->
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-gears"></i>
+                    <span>设置</span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-child" aria-hidden="true"></i></i>个人资料</a>
+                        <ul class="treeview-menu">
+                            <li class="{{.MenuSelfInfoActive}}"><a href="/user/{{.LoginUser.ID}}?action=detail"><i class="fa fa-user-secret" aria-hidden="true"></i>个人信息</a></li>
+                            <li class="{{.MenuChangePwdActive}}"><a href="/user/{{.user.ID}}?action=changepasswd"><i class="fa fa-unlock"></i>密码修改</a></li>
+                            <li class="{{.MenuRecordActive}}"><a href="/record/"><i class="fa fa-list-ol"></i>登录记录</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-film" aria-hidden="true"></i></i>权限管理</a>
+                        <ul class="treeview-menu">
+                            <li class="{{.MenuSourceActive}}"><a href="/source/"><i class="fa fa-calendar-minus-o" aria-hidden="true"></i>系统资源</a></li>
+                            <li class="{{.MenuRoleActive}}"><a href="/role/"><i class="fa fa-users" aria-hidden="true"></i>角色管理</a></li>
+                            <li class="{{.MenuPermissionActive}}"><a href="/permission/"><i class="fa fa-lock" aria-hidden="true"></i>权限设置</a></li>
+                            <li class="{{.MenuMenuActive}}"><a href="/menu/"><i class="fa fa-bars" aria-hidden="true"></i>菜单管理</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-indent" aria-hidden="true"></i>公司管理</a>
+                        <ul class="treeview-menu">
+                            <li class="{{.MenuCompanyActive}}"><a href="/company/"><i class="fa fa-check-circle-o"></i>公司资料</a></li>
+                            <li class="{{.MenuDepartmentActive}}"><a href="/department/"><i class="fa fa-arrow-circle-right"></i>部门管理</a></li>
+                            <li class="{{.MenuTeamActive}}"><a href="/team/"><i class="fa fa-arrow-circle-right"></i>团队管理</a></li>
+                            <li class="{{.MenuPositionActive}}"><a href="/position/"><i class="fa fa-arrow-circle-right"></i>职位管理</a></li>
+                        </ul>
+                    </li>
+                    <li class="{{.MenuUserActive}}"><a href="/user/"><i class="fa fa-users" aria-hidden="true"></i></i>用户管理</a></li>
+                    <li class="treeview">
+                        <a href="#"><i class="fa fa-building" aria-hidden="true"></i></i>地址管理</a>
+                        <ul class="treeview-menu">
+                            <li class="{{.MenuAddressCountryActive}}"><a href="/address/country/"><i class="fa fa-check-circle-o"></i>国家管理</a></li>
+                            <li class="{{.MenuAddressProvinceActive}}"><a href="/address/province/"><i class="fa fa-arrow-circle-right"></i>省份管理</a></li>
+                            <li class="{{.MenuAddressCityActive}}"><a href="/address/city/"><i class="fa fa-arrow-circle-right"></i>城市管理</a></li>
+                            <li class="{{.MenuAddressDistrictActive}}"><a href="/address/district/"><i class="fa fa-arrow-circle-right"></i>区县管理</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview {{.MenuSequenceActive}}">
+                        <a href="/sequence">
+                            <i class="fa fa-list-ol" aria-hidden="true"></i><span>序号管理</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-newspaper-o" aria-hidden="true"></i><span>产品管理</span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{.MenuProductCategoryActive}}"><a href="/product/category/"><i class="fa fa-bars"></i>产品类别</a></li>
+                    <li class="{{.MenuProductAttributeActive}}"><a href="/product/attribute/"><i class="fa fa-bars"></i>产品属性</a></li>
+                    <li class="{{.MenuProductAttributeValueActive}}"><a href="/product/attributevalue/"><i class="fa fa-bars"></i>产品属性值</a></li>
+                    <li class="{{.MenuProductTemplateActive}}"><a href="/product/template/"><i class="fa fa-bars" ></i>产品款式</a></li>
+                    <li class="{{.MenuProductProductActive}}"><a href="/product/product/"><i class="fa fa-bars"></i>产品规格</a></li>
+                    <li class="{{.MenuProductUomCategActive}}"><a href="/product/uomcateg/"><i class="fa fa-bars"></i>计量单位分类</a></li>
+                    <li class="{{.MenuProductUomActive}}"><a href="/product/uom/"><i class="fa fa-bars"></i>产品计量单位</a></li>
+                    <li class="{{.MenuProductAttributeLineActive}}"><a href="/product/attributeline/"><i class="fa fa-bars" ></i>产品款式属性</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#" id="sale-menu">
+                    <i class="fa fa-shopping-basket" aria-hidden="true"></i><span>销售管理</span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-gears" aria-hidden="true"></i><span>销售设置</span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="{{.MenuSaleConfigActive}}"><a href="/sale/config/"><i class="fa fa-bars"></i>基本设置</a></li>
+                            <li class="{{.MenuSaleOrderStateActive}}"><a href="/sale/order/state/"><i class="fa fa-bars"></i>订单状态</a></li>
+                        </ul>
+                    </li>
+                    <li class="{{.MenuSaleCounterActive}}"><a href="/sale/counter/?view=kanban"><i class="fa fa-bars"></i>柜台管理</a></li>
+                    <!--<li class="{{.MenuSaleCounterProductActive}}"><a href="/sale/counter/product/"><i class="fa fa-bars"></i>柜台产品管理</a></li>-->
+                    <li class="{{.MenuCustomerActive}}"><a href="/partner/?type=customer"><i class="fa fa-users"></i>客户管理</a></li>
+                    <!--<li class="{{.MenuSaleOrderDraftActive}}"><a href="/sale/order/?state=draft"><i class="fa fa-bars"></i>询价单</a></li>-->
+                    <li class="{{.MenuSaleOrderActive}}"><a href="/sale/order/"><i class="fa fa-bars"></i>销售订单</a></li>
+                    <li class="{{.MenuSaleOrderLineActive}}"><a href="/sale/order/line/"><i class="fa fa-bars"></i>订单明细</a></li>
+                    <li class="{{.MenuSaleReportActive}}"><a href="/sale/report/"><i class="fa fa-line-chart"></i>销售报表</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-tasks" aria-hidden="true"></i><span>采购管理</span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-gears" aria-hidden="true"></i><span>采购设置</span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="{{.MenuPurchaseConfigActive}}"><a href="/purchase/config/"><i class="fa fa-bars"></i>基本设置</a></li>
+                            <li class="{{.MenuPurchaseOrderStateActive}}"><a href="/purchase/order/state/"><i class="fa fa-bars"></i>订单状态</a></li>
+                        </ul>
+                    </li>
+                    <li class="{{.MenuSupplierActive}}"><a href="/partner/?type=supplier"><i class="fa fa-users"></i>供应商管理</a></li>
+                    <!--<li class="{{.MenuPurchaseOrderDraftActive}}"><a href="/purchase/order/?state=draft"><i class="fa fa-bars"></i>询价单</a></li>-->
+                    <li class="{{.MenuPurchaseOrderActive}}"><a href="/purchase/order/"><i class="fa fa-bars"></i>采购订单</a></li>
+                    <li class="{{.MenuPurchaseOrderLineActive}}"><a href="/purchase/order/line/"><i class="fa fa-bars"></i>采购明细</a></li>
+                    <li class="{{.MenuPurchaseReportActive}}"><a href="/purchase/report/"><i class="fa fa-bar-chart"></i>采购报表</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="/stock/picking/type/">
+                    <i class="fa fa-database" aria-hidden="true"></i><span>仓库管理</span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{.MenuStockWarehouseActive}}"><a href="/stock/warehouse/"><i class="fa fa-bars"></i>仓库管理</a></li>
+                    <li class="{{.MenuStockLocationActive}}"><a href="/stock/location/"><i class="fa fa-bars"></i>库位管理</a></li>
+                    <li class="{{.MenuStockPickingTypeActive}}"><a href="/stock/picking/type/"><i class="fa fa-bars"></i>库位类型</a></li>
+                    <li class="{{.MenuStockPickingOutgoingActive}}"><a href="/stock/picking/?direction=outgoing"><i class="fa fa-bars"></i>出库单</a></li>
+                    <li class="{{.MenuStockPickingIncomingActive}}"><a href="/stock/picking/?direction=incoming"><i class="fa fa-bars"></i>入库单</a></li>
+                    <li class="{{.MenuStockPickingInternalActive}}"><a href="/stock/picking/?direction=internal"><i class="fa fa-bars"></i>调拨单</a></li>
+                    <li class="{{.MenuStockInventoryActive}}"><a href="/stock/inventory/"><i class="fa fa-bars"></i>盘点</a></li>
+                    <li class="{{.MenuStockReportActive}}"><a href="#"><i class="fa fa-pie-chart"></i>库存报表</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="/templatefile">
+                    <i class="fa fa-folder-o" aria-hidden="true"></i><span>模版管理</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

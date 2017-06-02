@@ -1,0 +1,122 @@
+<div class="row">
+    <p id="list-title">{{.PageName}}</p>
+</div>
+
+<form id="permissionForm" action="{{.URL}}{{.RecordID}}?action={{.Action}}" method="post" class="post-form form-horizontal {{if .Readonly}}form-disabled{{else}}form-edit{{end}}" role="form">
+    <div class="row">
+        {{if .RecordID}} {{if .Readonly}}
+        <a href="{{.URL}}{{.RecordID}}?action=edit" class="btn btn-success fa fa-pencil pull-left form-edit-btn">&nbsp编辑</a>
+        <a href="{{.URL}}?action=create" type="buttom" class="btn btn-success fa fa-plus pull-left form-create-btn">&nbsp新建</a>{{end}}{{end}}
+        <button type="submit" form="permissionForm" class="btn btn-primary fa fa-save pull-left form-save-btn">&nbsp保存</button> {{if .Readonly}}
+        <button type="button" class="btn btn-danger fa fa-remove  pull-left form-cancel-btn">&nbsp取消</button> {{else}}
+        <a href="{{.URL}}" class="btn btn-danger fa fa-remove  pull-left">&nbsp取消</a> {{end}}
+        <a href="{{.URL}}" class="btn btn-info fa fa-list pull-left">&nbsp列表</a>
+    </div>
+    {{ .xsrf }} {{if .RecordID}}
+    <input type="hidden" data-type="int" class="{{.FormField}}" name="recordID" id="record-id" value="{{.RecordID}}"> {{end}}
+
+    <div class="row">
+        <div class="col-md-6">
+            <fieldset>
+                <legend>基本信息</legend>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="name" class="col-md-4 control-label label-start">权限名称<span class="required-input">&nbsp*</span></label>
+                            <div class="col-md-8">
+                                <p class="p-form-control">{{if .Permission}} {{.Permission.Name}} {{end}}</p>
+                                <input data-type="string" class="{{.FormField}} form-control" id="name" name="Name" type="text" {{if .Permission}} value="{{.Permission.Name}}" {{end}} />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="source" class="col-md-4 control-label label-start">系统资源<span class="required-input">&nbsp*</span></label>
+                            <div class="col-md-8">
+                                <p class="p-form-control">{{if and .Permission .Permission.Source}} {{.Permission.Source.Name}} {{end}}</p>
+                                <select data-type="int" {{if and .Permission .Permission.Source}} data-oldvalue="{{.Permission.Source.ID}}" {{end}} name="Source" id="Source" class="{{.FormField}} form-control select-source">
+                                    {{if and .Permission .Permission.Source}}
+                                    <option value="{{.Permission.Source.ID}}" selected="selected">{{.Permission.Source.Name}}</option>
+                                    {{end}}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col-md-6">
+            <fieldset>
+                <legend>角色信息</legend>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="roleIds" class="col-md-2 control-label label-start">拥有该权限的角色</label>
+                            <div class="col-md-10">
+                                <p class="p-form-control">{{if and .Permission .Permission.Roles}} {{range $j,$attrVal := .Permission.Roles}}<a class='display-block label label-primary'>{{$attrVal.Name}}</a> {{end}}{{end}}</p>
+                                <select data-type='array_int' data-name='RoleIds' name='RoleIds' id='roleIds' multiple='multiple' class='{{.FormField}} form-control select-role'>
+                                    {{if and .Permission  .Permission.Roles}} 
+                                        {{range $j,$attrVal :=  .Permission.Roles}}
+                                            <option value="{{$attrVal.ID}}" selected="selected">{{$attrVal.Name}}</option>
+                                        {{end}}
+                                    {{end}}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <fieldset>
+        <legend>权限设置</legend>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="permCreate" class="col-md-4 control-label ">创建</label>
+                    <div class="col-md-8 ">
+                        <input name="PermCreate" id="permCreate" class="form-control form-checkbox {{.FormField}}" checked="checked" type="checkbox">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="permRead" class="col-md-4 control-label ">读取</label>
+                    <div class="col-md-8 ">
+                        <input name="PermRead" id="permRead" class="form-control form-checkbox {{.FormField}}" checked="checked" type="checkbox">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="permWrite" class="col-md-4 control-label ">更新</label>
+                    <div class="col-md-8 ">
+                        <input name="PermWrite" id="permWrite" class="form-control form-checkbox {{.FormField}}" checked="checked" type="checkbox">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="permDelete" class="col-md-4 control-label ">删除</label>
+                    <div class="col-md-8 ">
+                        <input name="PermDelete" id="permDelete" class="form-control form-checkbox {{.FormField}}" checked="checked" type="checkbox">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="type" class="col-md-2 control-label label-start">权限类型</label>
+                    <div class="col-md-10">
+                        <input data-type="string" class="{{.FormField}} input-radio" {{if and .Product .Product.ProductType}} data-oldvalue="{{.Product.ProductType}}" {{else}}data-oldvalue="stock" {{end}} type="radio" id="stock-radio" value="stock" name="ProductType">
+                        <label class="input-radio-label" for="stock-radio">角色权限</label>
+                        <input data-type="string" class="{{.FormField}} input-radio" {{if and .Product .Product.ProductType}} data-oldvalue="{{.Product.ProductType}}" {{else}}data-oldvalue="stock" {{end}} type="radio" id="consume-radio" value="consume" name="ProductType">
+                        <label class="input-radio-label" for="consume-radio">私有权限</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+</form>

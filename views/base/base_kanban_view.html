@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{i18n .Lang "global.systemName"}}</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"> {{template "base/head_css.html" .}}
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <!--<body class="skin-blue sidebar-mini sidebar-collapse">-->
+    <div class="wrapper">
+        {{template "base/head_top.html" .}}
+        <!-- Left side column. contains the logo and sidebar -->
+        {{template "base/aside_left.html" .}}
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="row">
+                <p id="list-title">{{.PageName}}</p>
+            </div>
+            {{.xsrf}}
+            <div class="row title-action">
+                <a href="{{.URL}}?action=create" type="buttom" class="btn btn-success fa fa-plus pull-left">&nbsp新建</a>
+                <a type="button" data-toggle="modal" data-target="#importModal" class="btn btn-warning fa fa-mail-reply pull-left">&nbsp导入</a>
+                <div class="btn-group btn-group-sm pull-right">
+                    <a href="{{.URL}}?action=table" class="btn btn-default fa fa-list-ul list-button" data-view-type="list"></a>
+                    <a href="{{.URL}}?action=kanban" class="btn btn-default fa fa-th-large list-button active" data-view-type="kanban"></a>
+                    {{if eq .URL "/stock/picking/type/"}}
+                    <a href="{{.URL}}?action=flowChart" class="btn btn-default fa fa-exchange list-button" data-view-type="flowChart"></a>
+                    {{end}}
+                </div>
+            </div>
+            <div class="row" id="{{.KanbanId}}">
+            </div>
+        </div>
+
+    </div>
+
+    {{template "base/footer_js.html" .}}
+
+</body>
+
+</html>

@@ -1,0 +1,243 @@
+<div class="row">
+    <p id="list-title">{{.PageName}}</p>
+</div>
+
+<form id="saleOrderForm" action="{{.URL}}{{.RecordID}}?action={{.Action}}" method="post" class="post-form form-horizontal {{if .Readonly}}form-disabled{{else}}form-edit{{end}}" role="form">
+    <div class="row title-action">
+        {{if .RecordID}} {{if .Readonly}}
+        <a href="{{.URL}}{{.RecordID}}?action=edit" class="btn btn-success fa fa-pencil pull-left form-edit-btn">&nbsp编辑</a>
+        <a href="{{.URL}}?action=create" type="buttom" class="btn btn-success fa fa-plus pull-left form-create-btn">&nbsp新建</a>{{end}}{{end}}
+        <button type="submit" form="saleOrderForm" class="btn btn-primary fa fa-save pull-left form-save-btn">&nbsp保存</button> {{if .Readonly}}
+        <button type="button" class="btn btn-danger fa fa-remove  pull-left form-cancel-btn">&nbsp取消</button> {{else}}
+        <a href="{{.URL}}" class="btn btn-danger fa fa-remove  pull-left">&nbsp取消</a> {{end}}
+        <a href="{{.URL}}" class="btn btn-info fa fa-list pull-left">&nbsp列表</a>
+    </div>
+    <div class="row">
+        <nav class="navbar navbar-default navbar-form-state" role="navigation">
+            {{if .RecordID}}
+            <div class="pull-left">
+                {{if eq .Order.State.Name "draft"}}
+                <button class="btn btn-primary btn-sm">订单确认</button> {{end}}
+                <button class="btn btn-default btn-sm">取消</button>
+            </div>
+            {{end}}
+            <div class="pull-right">
+                <ul class="nav nav-pills nav-justified sale-order-state step step-arrow ">
+                    <li class="active">
+                        <a>&nbsp&nbsp草稿</a>
+                    </li>
+                    <li class="active">
+                        <a>&nbsp&nbsp确认</a>
+                    </li>
+                    <li class="active">
+                        <a>&nbsp&nbsp分拣</a>
+                    </li>
+                    <li>
+                        <a>&nbsp&nbsp称重</a>
+                    </li>
+                    <li>
+                        <a>&nbsp&nbsp打包</a>
+                    </li>
+                    <li>
+                        <a>&nbsp&nbsp验货</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    {{ .xsrf }} {{if .RecordID}}
+    <p id="form-sale-order-state" style="display: none;">{{.Order.State.Name}}</p>
+    <input type="hidden" name="recordID" id="record-id" value="{{.RecordID}}"> {{end}}
+    <div class="row">
+        <div class="col-md-6">
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="defaultCode" class="col-md-2 control-label label-start">订单号</label>
+                            <div class="col-md-10">
+                                {{if .Order}}
+                                <p> {{.Order.Name}}</p>{{else}}
+                                <p style="color: gray">自动生成</p> {{end}}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="parent" class="col-md-2 control-label label-start">客户</label>
+                            <div class="col-md-10">
+                                <p class="p-form-control">{{if and .Order .Order.Partner}} {{.Order.Partner.Name}}{{else}} - {{end}}</p>
+                                <select name="Partner" data-type="int" id="parent" {{if and .Order .Order.Partner}} data-oldvalue="{{.Order.Partner.ID}}" {{end}} class="form-control select-partner is-customer {{.FormField}}">
+                            {{if and .Order .Order.Partner}} 
+                            <option value="{{.Order.Partner.ID}}}" selected="selected">{{.Order.Partner.Name}}</option>
+                            {{end}} 
+                        </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="Company" class="col-md-4 control-label label-start">公司</label>
+                            <div class="col-md-8">
+                                <p class="p-form-control"> {{if and .Order .Order.Company}} {{.Order.Company.Name}}{{end}}</p>
+                                <select data-type="int" name="Company" id="Company" class="{{.FormField}} form-control select-company">
+                             {{if and .Order .Order.Company}}
+                            <option value="{{.Order.Company.ID}}" selected="selected">{{.Order.Company.Name}}</option>
+                            {{else}}
+                            <option value="{{.LoginUser.Company.ID}}" selected="selected">{{.LoginUser.Company.Name}}</option>
+                             {{end}} 
+                        </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="StockWarehouse" class="col-md-4 control-label label-start">发货仓库</label>
+                            <div class="col-md-8">
+                                <p class="p-form-control"> {{if and .Order .Order.StockWarehouse}} {{.Order.StockWarehouse.Name}}{{end}}</p>
+                                <select data-type="int" name="StockWarehouse" id="StockWarehouse" class="{{.FormField}} form-control select-company-stock-warehouse">
+                             {{if and .Order .Order.StockWarehouse}}
+                            <option value="{{.Order.StockWarehouse.ID}}" selected="selected">{{.Order.StockWarehouse.Name}}</option>
+                             {{end}} 
+                        </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="SalesMan" class="col-md-4 control-label label-start">业务员</label>
+                            <div class="col-md-8">
+                                <p class="p-form-control"> {{if and .Order .Order.SalesMan}} {{.Order.SalesMan.NameZh}}{{end}}</p>
+                                <select data-type="int" name="SalesMan" id="SalesMan" class="{{.FormField}} form-control select-user">
+                                    {{if and .Order .Order.SalesMan}}
+                                        <option value="{{.Order.SalesMan.ID}}" selected="selected">{{.Order.SalesMan.NameZh}}</option>
+                                    {{else}}
+                                        <option value="{{.LoginUser.ID}}" selected="selected">{{.LoginUser.NameZh}}</option>
+                                    {{end}} 
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="PickingPolicy" class="col-md-4 control-label label-start">发货策略</label>
+                            <div class="col-md-8">
+                                <p class="p-form-control"> {{if and .Order .Order.PickingPolicy}} {{.Order.PickingPolicy}}{{end}}</p>
+                                <select data-type="string" name="PickingPolicy" id="PickingPolicy" class="{{.FormField}} form-control select-picking-policy">
+                                    {{if and .Order .Order.PickingPolicy}}
+                                    <option value="{{.Order.PickingPolicy}}" selected="selected">{{.Order.PickingPolicy}}</option>
+                                    {{else}}
+                                        <option value="one" selected="selected">一次发货</option>
+                                    {{end}} 
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col-md-6">
+            <fieldset>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="CreateDate" class="col-md-2 control-label label-start">创建时间</label>
+                        <div class="col-md-10">
+                            <p> {{if and .Order .Order.CreateDate}} {{dateformat .Order.CreateDate "2006-01-02 15:04:05"}}{{end}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="country" class="col-md-4 control-label label-start">国家<span class="required-input">&nbsp*</span></label>
+                            <div class="col-md-8">
+                                <p class="p-form-control"> {{if and .Order .Order.Country}} {{.Order.Country.Name}}{{end}}</p>
+                                <select data-type="int" name="Country" id="country" class="{{.FormField}} form-control select-address-country">
+                             {{if and .Order .Order.Country}}
+                            <option value="{{.Order.Country.ID}}" selected="selected">{{.Order.Country.Name}}</option>
+                            {{else}}<option value="1" selected="selected">中国</option>{{end}} 
+                        </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="Province" class="col-md-4 control-label label-start">省份<span class="required-input">&nbsp*</span></label>
+                            <div class="col-md-8">
+                                <p class="p-form-control"> {{if and .Order .Order.Province}} {{.Order.Province.Name}}{{end}}</p>
+                                <select data-type="int" name="Province" id="Province" class="{{.FormField}} form-control select-address-province">
+                             {{if and .Order .Order.Province}}
+                            <option value="{{.Order.Province.ID}}" selected="selected">{{.Order.Province.Name}}</option>
+                             {{end}} 
+                        </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="City" class="col-md-4 control-label label-start">城市<span class="required-input">&nbsp*</span></label>
+                            <div class="col-md-8">
+                                <p class="p-form-control"> {{if and .Order .Order.City}} {{.Order.City.Name}}{{end}}</p>
+                                <select data-type="int" name="City" id="City" class="{{.FormField}} form-control select-address-city">
+                             {{if and .Order .Order.City}}
+                            <option value="{{.Order.City.ID}}" selected="selected">{{.Order.City.Name}}</option>
+                             {{end}} 
+                        </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="District" class="col-md-4 control-label label-start">区县</label>
+                            <div class="col-md-8">
+                                <p class="p-form-control"> {{if and .Order .Order.District}} {{.Order.District.Name}}{{end}}</p>
+                                <select data-type="int" name="District" id="District" class="{{.FormField}} form-control select-address-district">
+                             {{if and .Order .Order.District}}
+                            <option value="{{.Order.District.ID}}" selected="selected">{{.Order.District.Name}}</option>
+                             {{end}} 
+                        </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="Street" class="col-md-2 control-label label-start">街道<span class="required-input">&nbsp*</span></label>
+                            <div class="col-md-10">
+                                <p class="p-form-control">{{if .Order}} {{.Order.Street}} {{end}}</p>
+                                <textarea data-type="string" class="{{.FormField}} form-control" name="Street" id="Street" rows="2" placeholder="请输入街道信息">{{if .Order}}  {{.Order.Street}} {{end}}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <ul class="nav nav-tabs" role="tablist" id="product-tab">
+        <li role="presentation" class="active"><a data-toggle="tab" href="#saleOrderLine">订单明细</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="attributeInfo">
+
+            <div class="row" id="display-table">
+                <div class="col-md-12">
+                    <button type="button" id="add-one-sale-order-line" data-formid="saleOrderForm" class="btn btn-info pull-left form-table-add-line">添加明细</button>
+                    <table id="form-table-sale-order-line" data-formid="saleOrderForm" class="table table-bordered table-hover table-condensed table-striped">
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
